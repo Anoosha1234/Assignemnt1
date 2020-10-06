@@ -6,6 +6,7 @@ random_generator = Random.new()  // random key generator
 RSAKey = RSA.generate(1024, random_generator)  // generate key
 Pub_key = RSAKey.publickey().exportKey()
 
+
 def rsaencryption(msg, key):    // message encryption function
     cipher = Fernet(key)
     sent_msg = msg.encode('utf-8')
