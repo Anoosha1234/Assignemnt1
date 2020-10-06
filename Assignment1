@@ -1,0 +1,29 @@
+from cryptography.fernet import Fernet
+from Crypto.PublicKey import RSA
+from Crypto import Random
+
+random_generator = Random.new()
+RSAKey = RSA.generate(1024, random_generator)
+Pub_key = RSAKey.publickey().exportKey()
+
+def rsaencryption(msg, key):
+    cipher = Fernet(key)
+    sent_msg = msg.encode('utf-8')
+    encrypted_msg = cipher.encrypt(sent_msg)
+    return encrypted_msg
+
+
+def rsadecryption(encrypted_msg, key):
+    cipher = Fernet(key)
+    received_message = cipher.decrypt(bytes(encrypted_msg))
+    return received_message.decode()
+
+
+key = Fernet.generate_key()
+pub_key = RSA.importKey(Pub_key)
+encrypted_key = pub_key.encrypt(key, 64)
+keyDecrypted = RSAKey.decrypt(encrypted_key)
+
+message_encrypted = rsaencryption('Hello', keyDecrypted)
+message_decrypted = rsadecryption(message_encrypted, key)
+print(message_decrypted)
